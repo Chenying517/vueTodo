@@ -12,16 +12,17 @@ module.exports = {
     path: path.join(__dirname, 'dist')
   },
   plugins: [
-    new VueLoaderPlugin(),
-    new HtmlPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
+    new VueLoaderPlugin(),//vue-loader在15.*之后的版本，vue-loader的使用都是需要伴随VueLoaderPlugin使用
+    new HtmlPlugin(),//
+    new webpack.HotModuleReplacementPlugin(),//热更新插件
     new webpack.NoEmitOnErrorsPlugin()
   ],
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
     port: 9000,
-    hot: true
+    hot: true,
+    host:'0.0.0.0'
   },
   module: {
     rules: [
@@ -37,10 +38,30 @@ module.exports = {
         ]
       },
       {
+        test:/\.jsx$/,
+        use:[
+          'babel-loader'
+        ]
+      },
+      {
         test: /\.scss$/,
         use: [
           'style-loader',
           'sass-loader'
+        ]
+      },
+      {
+        test:/\.style$/,
+        use:[
+          'style-loader',
+          'css-loader',
+          {
+            loader:'postcss-loader',
+            options:{
+              sourceMap:true
+            }
+          },
+          'stylus-loader'
         ]
       },
       {
