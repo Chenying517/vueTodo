@@ -1,37 +1,56 @@
-const path = require('path')//path是nodejs里一个基本包
+const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const HtmlPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 
 module.exports = {
-  mode:'development',
+  mode: 'development',
+  devtool: '#cheap-module-eval-source-map',
   entry: path.join(__dirname, 'src/index.js'),
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, 'dist')
   },
-  plugins:[
-    new VueLoaderPlugin()
+  plugins: [
+    new VueLoaderPlugin(),
+    new HtmlPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
   ],
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 9000,
+    hot: true
+  },
   module: {
     rules: [
       {
-        test:/\.vue$/,
-        loader:'vue-loader'
+        test: /\.vue$/,
+        loader: 'vue-loader'
       },
       {
-        test:/\.css$/,
-        use:[
+        test: /\.css$/,
+        use: [
           'style-loader',
           'css-loader'
         ]
       },
       {
-        test:/\.(jpg|png|jpeg|svg|gif)$/,
-        use:[
+        test: /\.scss$/,
+        use: [
+          'style-loader',
+          'sass-loader'
+        ]
+      },
+      {
+        test: /\.(jpg|png|jpeg|svg|gif)$/,
+        use: [
           {
-            loader:'url-loader',
-            option:{
-              limit:1024,
-              name:'[name].[ext]'
+            loader: 'url-loader',
+            options: {
+              limit: 1024,
+              name: '[name].[ext]'
             }
           }
         ]
