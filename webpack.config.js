@@ -22,7 +22,6 @@ module.exports = {
     compress: true,
     port: 9000,
     hot: true,
-    host:'0.0.0.0'
   },
   module: {
     rules: [
@@ -51,7 +50,7 @@ module.exports = {
         ]
       },
       {
-        test:/\.style$/,
+        test:/\.styl$/,
         use:[
           'style-loader',
           'css-loader',
