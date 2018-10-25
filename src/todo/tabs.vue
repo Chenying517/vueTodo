@@ -1,6 +1,6 @@
 <template>
     <div class="helper">
-    <span class="left"> items left</span>
+    <span class="left"> {{unfinishedTodoLenth}} items left</span>
     <span class="tabs">
       <span 
         v-for="state in states" 
@@ -22,22 +22,28 @@ export default {
     todo: {
       type: Array,
       required: true
-    }
+    },
   },
   data() {
     return {
       states: ["all", "active", "completed"]
     };
   },
+  computed:{
+    unfinishedTodoLenth(){
+      return this.todo.filter(todo=>todo.completed==false).length
+    }
+  },
   methods: {
     toggleFilter(state) {
+      this.$emit('taggle',state)
     },
     clearAll() {
     }
   }
 };
 </script>
-<style   scoped>
+<style  scoped>
 .helper {
   font-weight: 100;
   display: flex;
@@ -79,7 +85,7 @@ export default {
   border: 1px solid rgba(175, 47, 47, 0);
 }
 
-.tabs * .actived {
+.tabs .actived {
   border-color: rgba(175, 47, 47, 0.4);
   border-radius: 5px;
 }

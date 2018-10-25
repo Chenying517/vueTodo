@@ -8,13 +8,16 @@
       @keyup.enter="addtodo"
     >
   <Item
-    :todo="todos[0]"
     v-for="todo in todos"
+    :todo="todo"
     :key="todo.id"
+    @del="delate"
+    
   />
     <Tab
       :filter="filter" 
       :todo="todos"
+      @taggle="tagglefilter"
     />
   </section>
 </template>
@@ -41,11 +44,17 @@ export default {
         content:e.target.value.trim(),
         completed:false
       };
-      debugger
       console.log(obj);
       this.todos.unshift(obj);
       e.target.value = ''
       console.log(this.todos)
+    },
+    delate(id){
+      this.todos.splice(this.todos.findIndex(todo=>todo.id==id),1)
+    },
+    tagglefilter(tag){
+      this.filter=tag
+      console.log(this.filter)
     }
   }
 };
