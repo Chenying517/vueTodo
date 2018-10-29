@@ -39,6 +39,7 @@ export default {
       this.$emit('taggle',state)
     },
     clearAll() {
+      this.$emit('clearAllcompleted')
     }
   }
 };

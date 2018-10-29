@@ -8,7 +8,7 @@
       @keyup.enter="addtodo"
     >
   <Item
-    v-for="todo in todos"
+    v-for="todo in filterTodos"
     :todo="todo"
     :key="todo.id"
     @del="delate"
@@ -18,6 +18,7 @@
       :filter="filter" 
       :todo="todos"
       @taggle="tagglefilter"
+      @clearAllcompleted='clearAllcompleted'
     />
   </section>
 </template>
@@ -37,6 +38,15 @@ export default {
     Item,
     Tab
   },
+  computed:{
+    filterTodos(){
+      if(this.filter==="all"){
+        return this.todos
+      }
+      const completed = this.filter === 'completed'
+      return this.todos.filter(todo => completed === todo.completed)
+    }
+  },
   methods: {
    addtodo(e) {
       var obj = {
@@ -55,6 +65,9 @@ export default {
     tagglefilter(tag){
       this.filter=tag
       console.log(this.filter)
+    },
+    clearAllcompleted() {
+      this.todos = this.todos.filter(todo => !todo.completed)
     }
   }
 };
