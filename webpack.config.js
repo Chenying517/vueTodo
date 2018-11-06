@@ -2,27 +2,24 @@ const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
+const isDev = process.env.NODE_ENV === 'development'
 
-module.exports = {
-  mode: 'development',
-  devtool: '#cheap-module-eval-source-map',
+const config = {
+  target: 'web',
   entry: path.join(__dirname, 'src/index.js'),
   output: {
-    filename: 'bundle.js',
+    filename: 'bundle.[hash:8]js',
     path: path.join(__dirname, 'dist')
   },
   plugins: [
     new VueLoaderPlugin(),//vue-loader在15.*之后的版本，vue-loader的使用都是需要伴随VueLoaderPlugin使用
     new HtmlPlugin(),//
-    new webpack.HotModuleReplacementPlugin(),//热更新插件
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: isDev ? '"development"' : '"production"'
+      }
+    })
   ],
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true,
-    port: 9000,
-    hot: true,
-  },
   module: {
     rules: [
       {
@@ -37,8 +34,8 @@ module.exports = {
         ]
       },
       {
-        test:/\.jsx$/,
-        use:[
+        test: /\.jsx$/,
+        use: [
           'babel-loader'
         ]
       },
@@ -49,20 +46,20 @@ module.exports = {
           'sass-loader'
         ]
       },
-      {
-        test:/\.styl$/,
-        use:[
-          'style-loader',
-          'css-loader',
-          {
-            loader:'postcss-loader',
-            options:{
-              sourceMap:true
-            }
-          },
-          'stylus-loader'
-        ]
-      },
+      // {
+      //   test: /\.styl$/,
+      //   use: [
+      //     'style-loader',
+      //     'css-loader',
+      //     {
+      //       loader: 'postcss-loader',
+      //       options: {
+      //         sourceMap: true
+      //       }
+      //     },
+      //     'stylus-loader'
+      //   ]
+      // },
       {
         test: /\.(jpg|png|jpeg|svg|gif)$/,
         use: [
@@ -78,3 +75,65 @@ module.exports = {
     ]
   }
 }
+
+if (isDev) {
+  config.module.rules.push({
+    test: /\.styl$/,
+    use: [
+      'style-loader',
+      'css-loader',
+      {
+        loader: 'postcss-loader',
+        options: {
+          sourceMap: true
+        }
+      },
+      'stylus-loader'
+    ]
+  })
+  config.devtool = '#cheap-module-eval-source-map',
+    config.devServer = {
+      contentBase: path.join(__dirname, 'dist'),
+      port: 8899,
+      overlay: {
+        errors: true
+      },
+      hot: true,
+    },
+    config.plugins.push(
+      new webpack.HotModuleReplacementPlugin(),
+      new webpack.NoEmitOnErrorsPlugin()
+    )
+} else {
+  config.entry = {
+    app: path.join(__dirname, 'src/index.js'),
+    vendor: ['vue']
+  }
+  config.output.filename = '[name].[chunkhash:8].js'
+  config.module.rules.push({
+    test: /\.styl$/,
+    use: ExtractPlugin.extract({
+      fallback: 'style-loader',
+      use: [
+        'css-loader',
+        {
+          loader: 'postcss-loader',
+          options: {
+            sourceMap: true
+          }
+        },
+        'stylus-loader'
+      ]
+    })
+  })
+  config.plugins.push(
+    new ExtractPlugin('style.[contentHash:8].css'),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor'
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'runtime'
+    })
+  )
+}
+module.exports = config
