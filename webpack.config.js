@@ -8,7 +8,7 @@ const config = {
   target: 'web',
   entry: path.join(__dirname, 'src/index.js'),
   output: {
-    filename: 'bundle.[hash:8]js',
+    filename: 'bundle.[hash:8].js',
     path: path.join(__dirname, 'dist')
   },
   plugins: [
@@ -46,20 +46,6 @@ const config = {
           'sass-loader'
         ]
       },
-      // {
-      //   test: /\.styl$/,
-      //   use: [
-      //     'style-loader',
-      //     'css-loader',
-      //     {
-      //       loader: 'postcss-loader',
-      //       options: {
-      //         sourceMap: true
-      //       }
-      //     },
-      //     'stylus-loader'
-      //   ]
-      // },
       {
         test: /\.(jpg|png|jpeg|svg|gif)$/,
         use: [
@@ -67,7 +53,7 @@ const config = {
             loader: 'url-loader',
             options: {
               limit: 1024,
-              name: '[name].urloader.[ext]'
+              name: '[name].[hash:8].[ext]'
             }
           }
         ]
@@ -109,7 +95,7 @@ if (isDev) {
     app: path.join(__dirname, 'src/index.js'),
     vendor: ['vue']
   }
-  config.output.filename = '[name].[chunkhash:8].js'
+  config.output.filename = '[name].[hash:8].js'
   config.module.rules.push({
     test: /\.styl$/,
     use: ExtractPlugin.extract({
