@@ -3,12 +3,13 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const isDev = process.env.NODE_ENV === 'development'
+const ExtractPlugin = require('extract-text-webpack-plugin')
 
 const config = {
   target: 'web',
   entry: path.join(__dirname, 'src/index.js'),
   output: {
-    filename: 'bundle.[hash:8].js',
+
     path: path.join(__dirname, 'dist')
   },
   plugins: [
@@ -20,6 +21,11 @@ const config = {
       }
     })
   ],
+  optimization: {
+    splitChunks: {
+      name: 'common'
+    }
+  },
   module: {
     rules: [
       {
@@ -63,20 +69,21 @@ const config = {
 }
 
 if (isDev) {
-  config.module.rules.push({
-    test: /\.styl$/,
-    use: [
-      'style-loader',
-      'css-loader',
-      {
-        loader: 'postcss-loader',
-        options: {
-          sourceMap: true
-        }
-      },
-      'stylus-loader'
-    ]
-  })
+  config.output.filename = 'bundle.js',
+    config.module.rules.push({
+      test: /\.styl$/,
+      use: [
+        'style-loader',
+        'css-loader',
+        {
+          loader: 'postcss-loader',
+          options: {
+            sourceMap: true
+          }
+        },
+        'stylus-loader'
+      ]
+    })
   config.devtool = '#cheap-module-eval-source-map',
     config.devServer = {
       contentBase: path.join(__dirname, 'dist'),
@@ -90,11 +97,13 @@ if (isDev) {
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoEmitOnErrorsPlugin()
     )
-} else {
+}
+else {
   config.entry = {
     app: path.join(__dirname, 'src/index.js'),
     vendor: ['vue']
   }
+  console.log('isDev' + isDev)
   config.output.filename = '[name].[hash:8].js'
   config.module.rules.push({
     test: /\.styl$/,
@@ -112,14 +121,16 @@ if (isDev) {
       ]
     })
   })
+  config.optimization.runtimeChunk = true
+  config.optimization.splitChunks.name = 'vendor'
   config.plugins.push(
     new ExtractPlugin('style.[contentHash:8].css'),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor'
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'runtime'
-    })
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'vendor'
+    // }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'runtime'
+    // })
   )
 }
 module.exports = config

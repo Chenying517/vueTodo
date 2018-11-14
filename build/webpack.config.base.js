@@ -4,6 +4,7 @@ const isDev = process.env.NODE_ENV === 'development'
 
 const config = {
   target: 'web',
+  mode: process.env.NODE_ENV || 'production', // development || production
   entry: path.join(__dirname, '../src/index.js'),
   output: {
     filename: 'bundle.[hash:8].js',
