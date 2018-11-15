@@ -79,7 +79,14 @@ if (isDev) {
               'stylus-loader'
             ]
           })
-        }
+        },
+        {
+          test: /\.css$/,
+          use: ExtractPlugin.extract({
+            fallback: "style-loader",
+            use: "css-loader"
+          })
+        },
       ]
     },
     optimization: {

@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/Chenying517/vueTodo#readme",
   "dependencies": {
-    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+  
     "vue": "^2.5.17"
   },
   "devDependencies": {
@@ -49,6 +49,8 @@
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.9",
-    "webpack-merge": "^4.1.4"
+    "webpack-merge": "^4.1.4",
+    "eslint-loader": "^2.1.1",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0"
   }
 }

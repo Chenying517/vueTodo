@@ -1,5 +1,5 @@
 const path = require('path')
-const vueLoaderOption = require('./vue-loader.config')
+const createVueLoaderOptions = require('./vue-loader.config')
 const isDev = process.env.NODE_ENV === 'development'
 
 const config = {
@@ -15,14 +15,17 @@ const config = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: vueLoaderOption(isDev)
+        // options: createVueLoaderOptions(isDev)
+        options: {
+          preserveWhitepace: true,
+          extractCSS: true,
+        }
       },
+   
       {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
+        test: /\.(vue|js|jsx)$/,
+        exclude: /node_modules/,
+        enforce: 'pre'
       },
       {
         test: /\.jsx$/,
