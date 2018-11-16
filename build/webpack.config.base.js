@@ -13,6 +13,12 @@ const config = {
   module: {
     rules: [
       {
+        test: /\.(vue|js|jsx)$/,
+        loader:"eslint-loader",
+        exclude: /node_modules/,
+        enforce: 'pre'
+      },
+      {
         test: /\.vue$/,
         loader: 'vue-loader',
         // options: createVueLoaderOptions(isDev)
@@ -21,23 +27,12 @@ const config = {
           extractCSS: true,
         }
       },
-   
-      {
-        test: /\.(vue|js|jsx)$/,
-        exclude: /node_modules/,
-        enforce: 'pre'
-      },
       {
         test: /\.jsx$/,
         use: [
           'babel-loader'
         ]
       },
-      // {
-      //   test: /\.js$/,
-      //   loader: 'babel-loader',
-      //   exclude: /node_modules/
-      // },
       {
         test: /\.scss$/,
         use: [
