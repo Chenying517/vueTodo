@@ -54,10 +54,8 @@ export default {
         content:e.target.value.trim(),
         completed:false
       };
-      console.log(obj);
       this.todos.unshift(obj);
       e.target.value = ''
-      console.log(this.todos)
     },
     delate(id){
       this.todos.splice(this.todos.findIndex(todo=>todo.id==id),1)

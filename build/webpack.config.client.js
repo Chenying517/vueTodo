@@ -22,8 +22,7 @@ const defaultPlugin = [
       NODE_ENV: isDev ? '"development"' : '"production"'
     }
   }),
-  new HtmlPlugin({
-  }),
+  new HtmlPlugin({}),
   new VueLoaderPlugin()
 ]
 let config
@@ -45,7 +44,11 @@ if (isDev) {
           },
           'stylus-loader'
         ]
-      }]
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader','css-loader']
+      },]
     },
     devServer,
     plugins: defaultPlugin.concat([

@@ -18,7 +18,7 @@
     }
   }
 </script>
-<style  scoped>
+<style  scoped  >
 #app {
   position: absolute;
   left: 0;
