@@ -22,7 +22,9 @@ const defaultPlugin = [
       NODE_ENV: isDev ? '"development"' : '"production"'
     }
   }),
-  new HtmlPlugin({}),
+  new HtmlPlugin({
+    template:path.join(__dirname,'./template.html')
+  }),
   new VueLoaderPlugin()
 ]
 let config

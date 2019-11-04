@@ -12,7 +12,7 @@ const config = {
     path: path.join(__dirname, 'dist')
   },
   plugins: [
-    new VueLoaderPlugin(),//vue-loader在15.*之后的版本，vue-loader的使用都是需要伴随VueLoaderPlugin使用
+    new VueLoaderPlugin(),//vue-loader在15.*之后的版本，vue-loader的使用 都是需要伴随VueLoaderPlugin使用
     new HtmlPlugin(),//
     new webpack.DefinePlugin({
       'process.env': {
@@ -123,13 +123,7 @@ else {
   config.optimization.runtimeChunk = true
   config.optimization.splitChunks.name = 'vendor'
   config.plugins.push(
-    new ExtractPlugin('style.[contentHash:8].css'),
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: 'vendor'
-    // }),
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: 'runtime'
-    // })
+    new ExtractPlugin('style.[contentHash:8].css')
   )
 }
 module.exports = config
